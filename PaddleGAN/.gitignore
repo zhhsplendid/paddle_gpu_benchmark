@@ -2,4 +2,4 @@ data
 output
 log_err
 log_out
-
+*.log
