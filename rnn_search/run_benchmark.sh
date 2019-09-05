@@ -1,4 +1,7 @@
 #!bin/bash
+
+# This script is from QA
+
 set -xe
 
 if [[ $# -lt 3 ]]; then
