@@ -10,7 +10,7 @@ fi
 # Configuration of Allocator and GC
 export FLAGS_fraction_of_gpu_memory_to_use=1.0
 export FLAGS_eager_delete_tensor_gb=0.0
-export FLAGS_memory_fraction_of_eager_deletion=0.99999
+export FLAGS_memory_fraction_of_eager_deletion=1.0
 
 index="$1"
 run_log_path=${2:-$(pwd)}
@@ -19,7 +19,7 @@ device=${CUDA_VISIBLE_DEVICES//,/ }
 arr=($device)
 num_gpu_devices=${#arr[*]}
 
-base_batch_size=1
+base_batch_size=155
 
 batch_size=`expr ${base_batch_size} \* $num_gpu_devices`
 log_file=${run_log_path}/pix2pix_${index}_${num_gpu_devices}gpu.log
@@ -50,7 +50,7 @@ train() {
 
 if [ $index = "mem" ]
 then
-  export FLAGS_fraction_of_gpu_memory_to_use=0.001
+  export FLAGS_fraction_of_gpu_memory_to_use=0
   gpu_id=`echo $CUDA_VISIBLE_DEVICES | cut -c1`
   nvidia-smi --id=$gpu_id --query-compute-apps=used_memory --format=csv -lms 1000 > gpu_use.log 2>&1 &
   train
