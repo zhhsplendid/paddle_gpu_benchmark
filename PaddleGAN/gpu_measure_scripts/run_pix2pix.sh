@@ -51,6 +51,7 @@ train() {
 if [ $index = "mem" ]
 then
   export FLAGS_fraction_of_gpu_memory_to_use=0
+  base_batch_size=1
   gpu_id=`echo $CUDA_VISIBLE_DEVICES | cut -c1`
   nvidia-smi --id=$gpu_id --query-compute-apps=used_memory --format=csv -lms 1000 > gpu_use.log 2>&1 &
   train
