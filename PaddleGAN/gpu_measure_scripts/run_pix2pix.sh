@@ -19,7 +19,7 @@ device=${CUDA_VISIBLE_DEVICES//,/ }
 arr=($device)
 num_gpu_devices=${#arr[*]}
 
-base_batch_size=155
+base_batch_size=156
 
 batch_size=`expr ${base_batch_size} \* $num_gpu_devices`
 log_file=${run_log_path}/pix2pix_${index}_${num_gpu_devices}gpu.log
