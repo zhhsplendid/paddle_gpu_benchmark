@@ -123,7 +123,7 @@ def main():
 
     exec_strategy = fluid.ExecutionStrategy()
     exec_strategy.num_threads = device_count
-    exec_strategy.num_iteration_per_drop_scope = 100
+    exec_strategy.num_iteration_per_drop_scope = 1
 
     build_strategy = fluid.BuildStrategy()
     build_strategy.enable_inplace = True
@@ -210,6 +210,14 @@ def main():
             batch_times = []
             for batch_id, batch in enumerate(train_data_iter):
                 batch_start_time = time.time()
+    
+                if args.profile and batch_id == 0:
+                    print("Start profiler")
+                    profiler.start_profiler('All')
+                if args.profile and batch_id == 30:
+                    print("Stop profiler")
+                    profiler.stop_profiler("total", "seq2seq.profile")
+
                 input_data_feed, word_num = prepare_input(batch, epoch_id=epoch_id)
                 fetch_outs = exe.run(program=train_program,
                                      feed=input_data_feed,
@@ -263,9 +271,10 @@ def main():
             print("kpis\ttrain_ppl_card%s\t%f" %
                 (card_num, _ppl))
 
-    with profile_context(args.profile):
-        train()
-
+    # with profile_context(args.profile):
+    train()
+    # if args.profile:
+    #     profiler.stop_profiler('total', 'seq2seq.profile')
 
 def get_cards():
     num = 0
